@@ -1,6 +1,6 @@
 <body>
     <h2>Overview</h2>
-  <p>Welcome to the Social Network System Design project, a part of the System Design course! This project focuses on designing the architecture and APIs for a social networking platform. It serves as a practical application of system design   principles, covering various functionalities such as friend management, user profiles, posts, media uploads, feed retrieval, chat management, and messaging.</p>
+  <p>Welcome to the Social Network System Design project, a part of the System Design course! This project focuses on designing the architecture and APIs for a social networking platform.</p>
 
   <h1>Social Network API</h1>
   <p>Version: 1.0.0</p>
