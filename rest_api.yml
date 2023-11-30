@@ -1,0 +1,261 @@
+openapi: 3.0.0
+info:
+  title: Social Network API
+  version: 1.0.0
+paths:
+  /friends:
+    post:
+      summary: Add a friend
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FriendshipRequest'
+      responses:
+        '201':
+          description: Friend request sent successfully
+
+  /friends/{friend_uuid}:
+    delete:
+      summary: Remove a friend
+      parameters:
+        - name: friend_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Friend removed successfully
+
+  /users/{user_uuid}/friends:
+    get:
+      summary: Get user's friends
+      parameters:
+        - name: user_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of user's friends
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/{user_uuid}:
+    get:
+      summary: Get user profile
+      parameters:
+        - name: user_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /posts:
+    post:
+      summary: Create a post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Post'
+      responses:
+        '201':
+          description: Post created successfully
+
+  /posts/{post_uuid}/media:
+    post:
+      summary: Upload media for a post
+      parameters:
+        - name: post_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MediaUpload'
+      responses:
+        '201':
+          description: Media uploaded successfully
+
+  /feed:
+    get:
+      summary: Get global feed
+      responses:
+        '200':
+          description: List of posts in the feed
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+
+  /feed/users/{user_uuid}:
+    get:
+      summary: Get user's feed
+      parameters:
+        - name: user_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of user's posts in the feed
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+
+  /chats/users/{user_uuid}:
+    get:
+      summary: Get user's chats
+      parameters:
+        - name: user_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: List of user's chats
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Chat'
+
+  /chats/{chat_uuid}:
+    get:
+      summary: Get chat details
+      parameters:
+        - name: chat_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Chat details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+
+  /messages/{message_uuid}:
+    patch:
+      summary: Mark message as seen
+      parameters:
+        - name: message_uuid
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageUpdate'
+      responses:
+        '200':
+          description: Message marked as seen successfully
+
+  /messages:
+    post:
+      summary: Send a message
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Message'
+      responses:
+        '201':
+          description: Message sent successfully
+
+components:
+  schemas:
+    FriendshipRequest:
+      type: object
+      properties:
+        user_uuid:
+          type: string
+          format: uuid
+
+    User:
+      type: object
+      properties:
+        user_uuid:
+          type: string
+          format: uuid
+        username:
+          type: string
+
+    Post:
+      type: object
+      properties:
+        user_uuid:
+          type: string
+          format: uuid
+        content:
+          type: string
+
+    MediaUpload:
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+
+    Chat:
+      type: object
+      properties:
+        chat_uuid:
+          type: string
+          format: uuid
+        participants:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+
+    Message:
+      type: object
+      properties:
+        chat_uuid:
+          type: string
+          format: uuid
+        content:
+          type: string
+
+    MessageUpdate:
+      type: object
+      properties:
+        seen:
+          type: boolean
