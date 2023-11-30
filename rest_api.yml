@@ -169,25 +169,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Chat'
 
-  /messages/{message_uuid}:
-    patch:
-      summary: Mark message as seen
-      parameters:
-        - name: message_uuid
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MessageUpdate'
-      responses:
-        '200':
-          description: Message marked as seen successfully
-
   /messages:
     post:
       summary: Send a message
@@ -199,6 +180,16 @@ paths:
       responses:
         '201':
           description: Message sent successfully
+    patch:
+      summary: Mark message as seen
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageUpdate'
+      responses:
+        '200':
+          description: Message marked as seen successfully
 
 components:
   schemas:
@@ -212,7 +203,7 @@ components:
     User:
       type: object
       properties:
-        user_uuid:
+        uuid:
           type: string
           format: uuid
         username:
@@ -257,5 +248,8 @@ components:
     MessageUpdate:
       type: object
       properties:
+        uuid:
+          type: string
+          format: uuid
         seen:
           type: boolean
